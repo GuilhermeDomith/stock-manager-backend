@@ -1,0 +1,35 @@
+.container{
+    margin: 25px 50px;
+}
+
+h1{
+    font-size: 1.5em;
+    font-weight: 500;
+    color: rgb(163, 87, 0);
+}
+
+.descricao-produto{
+    font-weight: 500 !important;
+}
+
+.info-produto{
+    font-size: 0.8em;
+}
+
+.fab-btn{
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgb(255, 166, 0);
+    color: white;
+}
+
+.list-item{
+    background-color: white;
+    min-width: 400px;
+    color: #707070;
+}
+
+.list-item:hover{
+    background-color: rgb(220, 232, 255);
+}
