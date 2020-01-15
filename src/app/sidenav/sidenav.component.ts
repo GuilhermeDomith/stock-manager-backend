@@ -10,12 +10,12 @@ export class SidenavComponent {
   showSidenav = true
   pages = [{
     label:'Produtos',
-    url:'produtos'
+    path:'produtos'
   },{
     label:'Relatório de Produtos',
-    url:'relatorio'
+    path:'relatorio'
   },{
     label:'Balanço Mensal',
-    url:'balanco'
+    path:'balanco'
   }]
 }
