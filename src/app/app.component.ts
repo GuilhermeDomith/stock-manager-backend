@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  sidenavOpened = true
   title = 'controle-de-estoque';
 }

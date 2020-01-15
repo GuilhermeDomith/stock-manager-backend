@@ -1,0 +1,14 @@
+.form {
+    min-height: 70vh;
+    width: 100%;
+  }
+  
+  .input {
+    width: 100%;
+  }
+
+.card-actions{
+  margin-top: 20px;
+  text-align: right;
+}
+  

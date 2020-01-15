@@ -1,1 +1,14 @@
-<sidenav></sidenav>
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav mode="side" class="sidenav" [opened]="sidenavOpened">
+        <sidenav></sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <main class="container">
+        
+        <router-outlet></router-outlet>
+        <!-- <page-produtos></page-produtos> -->
+        <!-- <page-edit-produto></page-edit-produto> -->
+
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
