@@ -4,13 +4,14 @@ var connection = db.connect()
 module.exports = function(callback){
 
     this.inserir_produto = function(produto, callback){
-        var sql = `INSERT INTO produto(descricao, quantidade, data_update) 
-                VALUES ($1, $2, $3);`
+        var sql = `INSERT INTO produto (descricao, quantidade, data_update) 
+                VALUES ("$1", "$2", "$3");`
         
         sql = sql.replace('$1', produto.descricao)
         sql = sql.replace('$2', produto.quantidade)
         sql = sql.replace('$3', produto.data)
         
+        console.log(sql)
         connection.query(sql, callback)
     }
 

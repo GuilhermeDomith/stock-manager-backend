@@ -7,8 +7,6 @@ app.use(express.json())
 
 app.get('/', function(req, res){
     produto_dao.listar_produtos(function(error, result){
-        if(err) throw err
-
         var day = result[0].data_update.getDay()
         res.send({ result });
     });
