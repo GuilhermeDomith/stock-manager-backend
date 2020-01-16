@@ -5,7 +5,7 @@ module.exports = function(callback){
 
     this.inserir_produto = function(produto, callback){
         var sql = `INSERT INTO produto(descricao, quantidade, data_update) 
-                VALUES (A1, $2, $3);`
+                VALUES ($1, $2, $3);`
         
         sql = sql.replace('$1', produto.descricao)
         sql = sql.replace('$2', produto.quantidade)
