@@ -8,8 +8,8 @@ module.exports = function(callback){
                 VALUES ("$1", "$2", "$3");`
         
         sql = sql.replace('$1', produto.descricao)
-        sql = sql.replace('$2', produto.quantidade)
-        sql = sql.replace('$3', produto.data)
+            .replace('$2', produto.quantidade)
+            .replace('$3', produto.data)
         
         console.log(sql)
         connection.query(sql, callback)

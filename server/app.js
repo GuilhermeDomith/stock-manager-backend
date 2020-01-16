@@ -1,12 +1,13 @@
 const express = require('express')
-const parser = require('body-parser')
-const produto_dao = require('./produto.js')()
+const bodyParser = require('body-parser')
+const produtoDao = require('./produto.js')()
 
 app = express()
-app.use(express.json())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.get('/', function(req, res){
-    produto_dao.listar_produtos(function(error, result){
+    produtoDao.listar_produtos(function(error, result){
         var day = result[0].data_update.getDay()
         res.send({ result });
     });
@@ -14,7 +15,7 @@ app.get('/', function(req, res){
 
 app.post('/produto', function(req, res){
     var produto = req.body;
-    produto_dao.inserir_produto(produto)
+    produtoDao.inserir_produto(produto)
     res.json(req.body);
 })
 
