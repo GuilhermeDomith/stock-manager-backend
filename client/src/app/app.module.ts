@@ -17,6 +17,8 @@ import {MatCardModule} from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { TitlePageComponent } from './title-page/title-page.component';
 import { Routes, RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 const routes:Routes = [
   {path: 'editar_produto', component: PageEditProdutoComponent},
@@ -44,6 +46,8 @@ const routes:Routes = [
     MatInputModule,
     MatCardModule,
     FormsModule,
+    HttpClientModule,
+    CommonModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],

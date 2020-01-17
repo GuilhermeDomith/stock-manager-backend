@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Produto } from '../produto.model';
+import { ProdutoService } from '../produto.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'page-produtos',
@@ -6,14 +10,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./page-produtos.component.css']
 })
 export class PageProdutosComponent{
-  produtos = [{
-    descricao: 'Embalagem para Bolos 400gr',
-    termino: '30 de Jan de 2020',
-    quantidade: 1000
-  },
-  {
-    descricao: 'Embalagem para Pães de Forma 500gr',
-    termino: '30 de Abr de 2020',
-    quantidade: 2000
-  }]
+  simpleReqProdutos :Observable<Produto[]>
+
+  constructor(
+    private produtoService : ProdutoService,
+    private router:Router){
+  }
+  
+  ngOnInit(){
+    this.getSimpleHttpRequest()  
+  }
+
+  getSimpleHttpRequest(){
+    this.simpleReqProdutos = this.produtoService.getProdutos()
+    //this.simpleReqProdutos.subscribe(produtos => produtos)                              s
+  }
+
+  toPageEditProduto(produto){
+    this.router.navigate(['/editar_produto'], {state: {data: produto}})
+    console.log(produto)
+  }
 }
