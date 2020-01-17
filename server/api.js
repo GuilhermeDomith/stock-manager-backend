@@ -2,10 +2,10 @@ module.exports = function(app){
 
     const produtoDao = require('./produto.js')()
 
-    app.get('/', function(req, res){
+    app.get('/produto', function(req, res){
         produtoDao.listar_produtos(function(error, result){
             var day = result[0].data_update.getDay()
-            res.send({ result });
+            res.json(result);
         });
     })
 

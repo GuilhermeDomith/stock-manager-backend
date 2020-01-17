@@ -9,7 +9,7 @@ module.exports = function(callback){
         
         sql = sql.replace('$1', produto.descricao)
             .replace('$2', produto.quantidade)
-            .replace('$3', produto.data)
+            .replace('$3', produto.data_update)
         
         console.log(sql)
         connection.query(sql, callback)
