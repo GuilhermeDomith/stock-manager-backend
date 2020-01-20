@@ -1,21 +1,23 @@
 <title-page text="Alterar Produto"></title-page>
 
-<mat-card class="card-form">
-    <form>
-        <mat-form-field class="input">
-            <input matInput placeholder="Descrição" [(ngModel)]="produto.descricao" name="descricao">
-        </mat-form-field>
+<main class="container">
+    <mat-card class="card-form">
+        <form>
+            <mat-form-field class="input">
+                <input matInput placeholder="Descrição" [(ngModel)]="produto.descricao" name="descricao">
+            </mat-form-field>
 
-        <mat-form-field class="input">
-            <input matInput placeholder="Quantidade" [(ngModel)]="produto.quantidade" name="quantidade">
-        </mat-form-field>
+            <mat-form-field class="input">
+                <input matInput placeholder="Quantidade" [(ngModel)]="produto.quantidade" name="quantidade">
+            </mat-form-field>
 
-        <mat-form-field class="input">
-            <input matInput placeholder="Data" [(ngModel)]="produto.data_update" name="data_update">
-        </mat-form-field>
-    </form>
-    <mat-card-actions class="card-actions">
-        <button mat-button >CANCELAR</button>
-        <button mat-button (click)="salvar()" color="primary">SALVAR</button>
-    </mat-card-actions>
-</mat-card>
+            <mat-form-field class="input">
+                <input matInput placeholder="Data" [(ngModel)]="produto.data_update" name="data_update">
+            </mat-form-field>
+        </form>
+        <mat-card-actions class="card-actions">
+            <button mat-button>CANCELAR</button>
+            <button mat-button (click)="salvar()" color="primary">SALVAR</button>
+        </mat-card-actions>
+    </mat-card>
+</main>

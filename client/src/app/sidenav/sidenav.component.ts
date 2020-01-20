@@ -7,7 +7,6 @@ import {Component} from '@angular/core';
   styleUrls: ['sidenav.component.css'],
 })
 export class SidenavComponent {
-  showSidenav = true
   pages = [{
     label:'Produtos',
     path:'produtos'

@@ -1,8 +1,7 @@
 import { Component, OnInit, EventEmitter, Input } from '@angular/core';
-import { formatDate, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ProdutoService } from '../produto.service';
 import { Produto } from '../produto.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'page-edit-produto',
@@ -20,7 +19,6 @@ export class PageEditProdutoComponent {
 
   constructor(
     private datePipe:DatePipe,
-    private router:Router,
     private produtoService:ProdutoService){}
 
   ngOnInit(){

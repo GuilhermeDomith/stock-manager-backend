@@ -1,24 +1,29 @@
 <title-page text="Produtos em Estoque"></title-page>
 
-<mat-card>
+<main class="container">
+    <mat-card>
+        <mat-list *ngIf="simpleReqProdutos | async as produtos">
 
-<mat-list *ngIf="simpleReqProdutos | async as produtos">
+            <mat-list-item *ngFor="let produto of produtos" class="list-item" routerLink="/editar_produto">
+                <a (click)="toPageEditProduto(produto)">
+                    <mat-icon matListIcon>edit</mat-icon>
+                </a>
+                <a routerLink="/produtos">
+                    <mat-icon matListIcon>delete</mat-icon>
+                </a>
+                <h3 matLine class="descricao-produto"> {{produto.descricao}} </h3>
+                <p matLine>
+                    <span class="info-produto">
+                        Última Atualização: {{produto.data_update}} - {{produto.quantidade}} Unid.
+                    </span>
+                </p>
+            </mat-list-item>
 
-    <mat-list-item *ngFor="let produto of produtos" class="list-item" routerLink="/editar_produto">
-        <!-- <a routerLink="/editar_produto"><mat-icon matListIcon>edit</mat-icon></a> -->
-        <a (click)="toPageEditProduto(produto)"><mat-icon matListIcon>edit</mat-icon></a>
-        <a routerLink="/produtos"><mat-icon matListIcon>delete</mat-icon></a>
-        <h3 matLine class="descricao-produto"> {{produto.descricao}} </h3>
-        <p matLine>
-            <span class="info-produto">
-                Última Atualização: {{produto.data_update}} - {{produto.quantidade}} Unid.
-            </span>
-        </p>
-    </mat-list-item>
+        </mat-list>
+    </mat-card>
 
-</mat-list>
-</mat-card>
+    <button mat-fab class="fab-btn" color="primary">
+        <mat-icon matListIcon>add</mat-icon>
+    </button>
 
-<button mat-fab class="fab-btn" color="primary">
-    <mat-icon matListIcon>add</mat-icon>
-</button>
+</main>
