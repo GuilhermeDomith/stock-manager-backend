@@ -15,8 +15,29 @@ module.exports = function(callback){
         connection.query(sql, callback)
     }
 
+    this.editar_produto = function(produto, callback){
+        var sql = `UPDATE produto as p SET 
+            p.descricao="$1", p.quantidade="$2", p.data_update="$3"
+            WHERE p.id="$4";`
+        
+        sql = sql.replace('$1', produto.descricao)
+            .replace('$2', produto.quantidade)
+            .replace('$3', produto.data_update)
+            .replace('$4', produto.id)
+        
+        console.log(sql)
+        connection.query(sql, callback)
+    }
+
     this.listar_produtos = function (callback){
         connection.query("SELECT * FROM produto;", callback);
+    }
+
+    this.delete_produto = function (produto, callback){
+        var sql = `DELETE FROM produto WHERE id="$1"`
+        sql = sql.replace('$1', produto.id)
+
+        connection.query(sql, callback)
     }
 
     return this;
