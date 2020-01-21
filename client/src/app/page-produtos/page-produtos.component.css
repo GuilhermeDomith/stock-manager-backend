@@ -2,12 +2,18 @@
     padding: 25px 50px;
 }
 
-a {
+a mat-icon{
     color: black;    
+    cursor: pointer;
+}
+
+a mat-icon:hover{
+    color: #27c1bf;
 }
 
 .descricao-produto{
     font-weight: 500 !important;
+    cursor: pointer;
 }
 
 .info-produto{
