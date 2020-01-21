@@ -4,14 +4,14 @@
     <mat-card>
         <mat-list *ngIf="simpleReqProdutos | async as produtos">
 
-            <mat-list-item *ngFor="let produto of produtos" class="list-item" routerLink="/editar_produto">
+            <mat-list-item *ngFor="let produto of produtos" class="list-item">
                 <a (click)="toPageEditProduto(produto)">
                     <mat-icon matListIcon>edit</mat-icon>
                 </a>
-                <a routerLink="/produtos">
+                <a (click)="deleteProduto(produto)">
                     <mat-icon matListIcon>delete</mat-icon>
                 </a>
-                <h3 matLine class="descricao-produto"> {{produto.descricao}} </h3>
+                <h3 matLine class="descricao-produto" routerLink="/editar_produto"> {{produto.descricao}} </h3>
                 <p matLine>
                     <span class="info-produto">
                         Última Atualização: {{produto.data_update}} - {{produto.quantidade}} Unid.
@@ -22,8 +22,8 @@
         </mat-list>
     </mat-card>
 
-    <button mat-fab class="fab-btn" color="primary">
-        <mat-icon matListIcon>add</mat-icon>
+    <button routerLink="/editar_produto" mat-fab class="fab-btn" color="primary">
+        <mat-icon matListIcon >add</mat-icon>
     </button>
 
 </main>

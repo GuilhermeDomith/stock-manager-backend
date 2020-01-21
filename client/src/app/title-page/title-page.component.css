@@ -29,10 +29,20 @@ h1{
     font-family: 'Titillium Web', sans-serif;
 }
 
+br{
+    content: '';
+    margin-bottom: 130px;
+    display: block;
+}
+
 @media (max-width: 450px){
 
     h1{
         font-size: 1.9em;
+    }
+
+    br{
+        margin-bottom: 105px;
     }
 }
 

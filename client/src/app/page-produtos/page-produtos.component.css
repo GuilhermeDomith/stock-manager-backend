@@ -1,13 +1,10 @@
 .container{
-    margin: 25px 50px;
+    padding: 25px 50px;
 }
 
 a {
-    color: black;
-    
- }
-
-
+    color: black;    
+}
 
 .descricao-produto{
     font-weight: 500 !important;

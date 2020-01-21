@@ -1,3 +1,7 @@
+.container{
+  padding: 25px 50px;
+}
+
 .form {
     min-height: 70vh;
     width: 100%;

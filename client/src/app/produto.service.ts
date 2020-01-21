@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Produto } from './produto.model';
 import { Observable } from 'rxjs';
 
@@ -17,9 +17,17 @@ export class ProdutoService {
   }
 
   setProduto(produto){
-    this.http.post(`${this.url}/produto`, produto).subscribe(function(res){
-      console.log(res)
-    })
+    const url = `${this.url}/produto`
+    return this.http.post(url, produto)
+  }
+
+  deleteProduto(id) : Observable<void>{
+    const url = `${this.url}/produto`
+    return this.http.request<void>('delete', url, {body: {id}})
+  }
+
+  private handleError(errorResponse : HttpErrorResponse){
+    console.log(errorResponse)
   }
 
 }

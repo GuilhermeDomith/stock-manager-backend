@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 const routes:Routes = [
   {path: 'editar_produto', component: PageEditProdutoComponent},
   {path: 'produtos', component: PageProdutosComponent},
-  {path: '', pathMatch:'full', redirectTo: 'editar_produto'}
+  {path: '', pathMatch:'full', redirectTo: 'produtos'}
 ]
 
 @NgModule({

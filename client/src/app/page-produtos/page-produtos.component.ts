@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Produto } from '../produto.model';
 import { ProdutoService } from '../produto.service';
 import { Router } from '@angular/router';
@@ -11,14 +11,15 @@ import { Router } from '@angular/router';
 })
 export class PageProdutosComponent{
   simpleReqProdutos :Observable<Produto[]>
+  update = new BehaviorSubject<boolean>(false);
 
   constructor(
     private produtoService : ProdutoService,
-    private router:Router){
-  }
+    private router:Router){ }
   
   ngOnInit(){
     this.getSimpleHttpRequest()  
+    this.update.subscribe(update=>update === true ? this.getSimpleHttpRequest() : '');
   }
 
   getSimpleHttpRequest(){
@@ -28,6 +29,16 @@ export class PageProdutosComponent{
 
   toPageEditProduto(produto){
     this.router.navigate(['/editar_produto'], {state: {data: produto}})
-    console.log(produto)
+  }
+
+  deleteProduto(produto){
+    const simpleDelProduto = this.produtoService.deleteProduto(produto.id)
+
+    simpleDelProduto.subscribe(function(res){
+      console.log(res)
+      console.log('deleted?', produto)
+    })
+
+    this.update.next(true)
   }
 }
