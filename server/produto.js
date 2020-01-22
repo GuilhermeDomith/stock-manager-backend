@@ -36,7 +36,12 @@ module.exports = function(callback){
     this.delete_produto = function (produto, callback){
         var sql = `DELETE FROM produto WHERE id="$1"`
         sql = sql.replace('$1', produto.id)
+        connection.query(sql, callback)
+    }
 
+    this.get_produto = function (id, callback){
+        var sql = `SELECT * FROM produto WHERE id="$1"`
+        sql = sql.replace("$1", id)
         connection.query(sql, callback)
     }
 
