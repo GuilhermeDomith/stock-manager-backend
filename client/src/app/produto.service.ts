@@ -26,6 +26,11 @@ export class ProdutoService {
     return this.http.request<void>('delete', url, {body: {id}})
   }
 
+  realizarBalanco(produto){
+    const url = `${this.url}/produto/balanco`
+    return this.http.post(url, produto)
+  }
+
   private handleError(errorResponse : HttpErrorResponse){
     console.log(errorResponse)
   }
