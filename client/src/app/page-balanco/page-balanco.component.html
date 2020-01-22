@@ -1,0 +1,50 @@
+<title-page text="Produtos em Estoque"></title-page>
+
+<main class="container">
+    <ng-container *ngIf="simpleReqProdutos | async as produtos">
+        <div fxLayout="rou" fxLayoutAlign="space-around stretch">
+            <table id="table-produtos" fxFlex mat-table [dataSource]="produtos">
+                <ng-container matColumnDef="descricao">
+                    <th mat-header-cell *matHeaderCellDef> Descrição </th>
+                    <td mat-cell *matCellDef="let p"> {{p.descricao}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantidade">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Quantidade em Estoque
+                        <span>Insira apenas quantidade em estoque do produto hoje.</span>
+                    </th>
+                    <td mat-cell *matCellDef="let p">
+                        <mat-form-field class="input">
+                            <input matInput [(ngModel)]="p.quantidade" name="quantidade">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantidade_add">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Adicionar
+                        <span>Insira a quantidade que será somada ao estoque atual.</span>
+                    </th>
+                    <td mat-cell *matCellDef="let p">
+                        <mat-form-field class="input">
+                            <input matInput [(ngModel)]="p.quantidade_add" name="quantidade_add">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let p">
+                        <a (click)="realizarBalanco(p)">
+                            <mat-icon matListIcon>send</mat-icon>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsTableProdutos"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsTableProdutos"></tr>
+            </table>
+        </div>
+    </ng-container>
+</main>

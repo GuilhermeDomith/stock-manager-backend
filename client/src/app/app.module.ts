@@ -4,9 +4,11 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSidenavModule } from '@angular/material/sidenav';
+import {MatGridListModule} from '@angular/material/grid-list'; 
 import {MatListModule} from '@angular/material/list'; 
 import {MatRippleModule} from '@angular/material/core';
+import {MatTableModule} from '@angular/material/table'; 
 import { PageProdutosComponent } from './page-produtos/page-produtos.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -19,10 +21,12 @@ import { TitlePageComponent } from './title-page/title-page.component';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { PageBalancoComponent } from './page-balanco/page-balanco.component';
 
 const routes:Routes = [
   {path: 'editar_produto', component: PageEditProdutoComponent},
   {path: 'produtos', component: PageProdutosComponent},
+  {path: 'balanco', component: PageBalancoComponent},
   {path: '', pathMatch:'full', redirectTo: 'produtos'}
 ]
 
@@ -33,6 +37,7 @@ const routes:Routes = [
     PageProdutosComponent,
     PageEditProdutoComponent,
     TitlePageComponent,
+    PageBalancoComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +50,8 @@ const routes:Routes = [
     MatDividerModule,
     MatInputModule,
     MatCardModule,
+    MatGridListModule,
+    MatTableModule,
     FormsModule,
     HttpClientModule,
     CommonModule,

@@ -24,7 +24,6 @@ export class PageProdutosComponent{
 
   getSimpleHttpRequest(){
     this.simpleReqProdutos = this.produtoService.getProdutos()
-    //this.simpleReqProdutos.subscribe(produtos => produtos)                              s
   }
 
   toPageEditProduto(produto){
