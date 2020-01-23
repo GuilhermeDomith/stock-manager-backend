@@ -27,7 +27,7 @@ export class ProdutoService {
   }
 
   realizarBalanco(produto){
-    const url = `${this.url}/produto/balanco`
+    const url = `${this.url}/balanco`
     return this.http.post(url, produto)
   }
 
