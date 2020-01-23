@@ -1,39 +1,10 @@
-module.exports = function(app){
+const produtoDao = require('../database/produto.js')
+const historicoDao = require('../database/historico.js')
+const dateformat = require('../utils/dateformat.js')
 
-    const produtoDao = require('./produto.js')()
-    const historicoDao = require('./historico.js')()
-    const dateformat = require('./dateformat.js')()
+module.exports = function(app) {
 
-    app.get('/produto', function(req, res){
-        produtoDao.listar_produtos(function(error, result){
-            res.json(result);
-        });
-    })
-
-    app.post('/produto', function(req, res){
-        var produto = req.body;
-        if(produto.id)
-            produtoDao.editar_produto(produto)
-        else
-            produtoDao.inserir_produto(produto)
-
-        res.json(req.body);
-    })
-
-    app.delete('/produto', function(req, res){
-        var id  = req.body.id
-        
-        produtoDao.delete_produto({id}, function(error, result){
-            if(error || result.affectedRows == 0){
-                console.log(error)
-                res.json({id: id, status:'not deleted'})
-            }else{
-                res.json({id: id, status:'deleted'})
-            }
-        })
-    })
-
-    app.post('/produto/balanco', function(req, res){
+    app.post('/balanco', function(req, res){
         var produto_balanco = req.body;
 
         produtoDao.get_produto(produto_balanco.id, function(error, result){
@@ -58,7 +29,7 @@ module.exports = function(app){
             
             if(dias_corridos <= 30){
                 return res.json({status: "O balanço do estoque só pode ser "+
-                "realizado após 30 dias, após a última atualização."})
+                "realizado 30 dias após a última atualização do produto."})
             }
 
             historico.gasto_diario = (historico.quant_abert - historico.quant_fech) / dias_corridos
@@ -71,7 +42,5 @@ module.exports = function(app){
             
             return res.json({status: "Balanço Realizado. Estoque do produto foi atualizado."})
         })
-      
     })
-
 }

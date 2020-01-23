@@ -1,4 +1,4 @@
-app = require('./app.js')
+app = require('./src/app.js')
 
 var server = {
     host: 'localhost',

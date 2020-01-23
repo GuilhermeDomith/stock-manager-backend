@@ -1,7 +1,7 @@
-var db = require('./database.js')
+var db = require('./connection.js')
 var connection = db.connect()
 
-module.exports = function(callback){
+function produtoDao(){
 
     this.inserir_produto = function(produto, callback){
         var sql = `INSERT INTO produto (descricao, quantidade, data_update) 
@@ -42,9 +42,12 @@ module.exports = function(callback){
     this.get_produto = function (id, callback){
         var sql = `SELECT * FROM produto WHERE id="$1"`
         sql = sql.replace("$1", id)
-        connection.query(sql, callback)
+        
+        return connection.query(sql, callback)
     }
 
     return this;
 
 }
+
+module.exports = produtoDao()

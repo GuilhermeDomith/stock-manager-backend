@@ -1,8 +1,8 @@
-const dateformat = require('./dateformat.js')()
-var db = require('./database.js')
+const dateformat = require('../utils/dateformat.js')
+var db = require('./connection.js')
 var connection = db.connect()
 
-module.exports = function(callback){
+function historicoDao(){
 
     this.registrar_historico = function(historico, callback){
         var sql = `INSERT INTO historico_estoque 
@@ -22,3 +22,5 @@ module.exports = function(callback){
     return this;
 
 }
+
+module.exports = historicoDao()

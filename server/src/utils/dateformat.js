@@ -1,6 +1,6 @@
 var dateformat = require('dateformat')
 
-module.exports = function (){
+function dateutils(){
 
     this.dateToString = function (date, format){
         return dateformat(date, format)
@@ -25,3 +25,5 @@ module.exports = function (){
 
     return this
 }
+
+module.exports = dateutils()

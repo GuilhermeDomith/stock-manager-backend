@@ -8,6 +8,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
-require('./api.js')(app)
+require('./api/balanco.js')(app)
+require('./api/produto.js')(app)
 
 module.exports = app 
