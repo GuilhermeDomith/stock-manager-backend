@@ -39,11 +39,16 @@ function produtoDao(){
         connection.query(sql, callback)
     }
 
-    this.get_produto = function (id, callback){
-        var sql = `SELECT * FROM produto WHERE id="$1"`
-        sql = sql.replace("$1", id)
-        
-        return connection.query(sql, callback)
+    this.get_produto = function (id){
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT * FROM produto WHERE id="$1"`
+            sql = sql.replace("$1", id)
+
+            connection.query(sql, (err, result) => {
+                if(err) reject(err)
+                else resolve(result.length >= 1 ? result[0] : [])
+            })
+        })
     }
 
     return this;
