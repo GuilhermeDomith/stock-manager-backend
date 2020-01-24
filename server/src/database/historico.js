@@ -2,6 +2,15 @@ const dateformat = require('../utils/dateformat.js')
 var db = require('./connection.js')
 var connection = db.connect()
 
+function queryPromisse(connection, sql){
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (err, result) => {
+            if(err) reject(err)
+            else resolve(result)
+        })
+    })
+}
+
 function historicoDao(){
 
     this.registrar_historico = function(historico, callback){
@@ -16,7 +25,7 @@ function historicoDao(){
             .replace('$5', historico.quant_fech)
             .replace('$6', historico.gasto_diario)
         
-        connection.query(sql, callback)
+        return queryPromisse(connection, sql)
     }
 
     return this;

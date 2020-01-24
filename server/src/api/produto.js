@@ -5,32 +5,29 @@ const dateformat = require('../utils/dateformat.js')
 module.exports = function(app){
 
     app.get('/produto', function(req, res){
-        produtoDao.listar_produtos(function(error, result){
-            res.json(result);
-        });
+        produtoDao.listar_produtos()
+            .then((produtos) => res.json(produtos))
+            .catch((err) => res.status(400).json({status: err.sqlMessage}))
     })
 
     app.post('/produto', function(req, res){
         var produto = req.body;
-        if(produto.id)
-            produtoDao.editar_produto(produto)
-        else
-            produtoDao.inserir_produto(produto)
+        let salvar_produto = produtoDao.inserir_produto
 
-        res.json(req.body);
+        if(produto.id)
+            salvar_produto = produtoDao.editar_produto
+
+        salvar_produto(produto)
+            .then(() => res.json({status: "Produto salvo."}))
+            .catch((err) => res.status(400).json({status: err.sqlMessage}))
     })
 
     app.delete('/produto', function(req, res){
         var id  = req.body.id
         
-        produtoDao.delete_produto({id}, function(error, result){
-            if(error || result.affectedRows == 0){
-                console.log(error)
-                res.json({id: id, status:'not deleted'})
-            }else{
-                res.json({id: id, status:'deleted'})
-            }
-        })
+        produtoDao.delete_produto({id})
+            .then((result) => res.json({id: id, status:`produtos excluídos: ${result.affectedRows}`}))
+            .catch((err) => res.status(400).json({id: id, status: err.sqlMessage}))
     })
 
 }

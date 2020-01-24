@@ -8,19 +8,33 @@ module.exports = function(app) {
         var produto_balanco = req.body;
 
         produtoDao.get_produto(produto_balanco.id)
-            .then((produto) => criarHistoricoProduto(produto_balanco, produto))
+            .then((result) => criarHistoricoProduto(produto_balanco, result))
             .then((historico) => calcularGastoDiario(historico))
-            .then((historico) => guardarHistoricoProduto(historico))
-            .then(() => atualizarEstoque(produto_balanco))
-            .then(() => {
-                res.json({status: "O Balanço do produto foi realizado e seu estoque atualizado."})
+            .then((historico) => {
+                historicoDao.registrar_historico(historico)
+                    .then(() => {
+                        atualizarEstoque(produto_balanco)
+                            .then(handlerSuccessRealizarBalanco)
+                            .catch((err) => handlerErrorRealizarBalanco(err, res))
+                    })
+                    .catch((err) => handlerErrorRealizarBalanco(err, res))
             })
-            .catch((err) =>{
-                res.json({status: err})
-            })
+            .catch((err) => handlerErrorRealizarBalanco(err, res))
     })
 
-    function criarHistoricoProduto(produto_balanco, produto){
+    function handlerErrorRealizarBalanco(err, res){
+        res.status(400).json({status: err.sqlMessage || err})
+    }
+
+    function handlerSuccessRealizarBalanco(res){
+        res.json({
+            status: "O Balanço do produto foi realizado e seu estoque atualizado."
+        })        
+    }
+
+    function criarHistoricoProduto(produto_balanco, result){
+        let produto = result[0]
+
         produto_balanco.data_update = dateformat.stringToDate(
             produto_balanco.data_update, 'yyyymmdd')
 
@@ -51,16 +65,12 @@ module.exports = function(app) {
         return historico
     }
 
-    function guardarHistoricoProduto(historico){
-        historicoDao.registrar_historico(historico)
-    }
-
     function atualizarEstoque(produto){
         produto.quantidade = parseInt(produto.quantidade) + parseInt(produto.quantidade_add)
         produto.data_update = dateformat.dateToString(
             produto.data_update, 'yyyymmdd')
 
-        produtoDao.editar_produto(produto)
+        return produtoDao.editar_produto(produto)
     }
 
 }
