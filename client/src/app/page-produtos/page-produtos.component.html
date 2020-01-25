@@ -12,10 +12,10 @@
                         <a (click)="deleteProduto(produto)">
                             <mat-icon matListIcon>delete</mat-icon>
                         </a>
-                        <h3 matLine class="descricao-produto" routerLink="/editar_produto"> {{produto.descricao}} </h3>
+                        <h3 matLine class="descricao-produto" (click)="toPageEditProduto(produto)"> {{produto.descricao}} </h3>
                         <p matLine>
                             <span class="info-produto">
-                                Última Atualização: {{produto.data_update}} - {{produto.quantidade}} Unid.
+                                Última Atualização: {{produto.data_update | date:'dd/MM/yyyy'}} - {{produto.quantidade}} Unid.
                             </span>
                         </p>
                     </mat-list-item>

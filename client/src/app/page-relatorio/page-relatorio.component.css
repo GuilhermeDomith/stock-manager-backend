@@ -1,0 +1,40 @@
+.container{
+    padding: 25px 50px;
+}
+
+a mat-icon{
+    color: black;    
+    cursor: pointer;
+}
+
+a mat-icon:hover{
+    color: #27c1bf;
+}
+
+.descricao-produto{
+    font-weight: 500 !important;
+}
+
+.info-produto{
+    font-size: 0.8em;
+}
+
+.data-termino-prod{
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
+.list-item{
+    background-color: white;
+    min-width: 400px;
+    color: #707070;
+}
+
+
+#header-list{
+    font-weight: 500 !important;
+    color: #707070;
+
+    display: flex;
+    align-items: stretch;
+}

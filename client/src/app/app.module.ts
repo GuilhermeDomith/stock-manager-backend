@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -22,11 +23,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { PageBalancoComponent } from './page-balanco/page-balanco.component';
+import { PageRelatorioComponent } from './page-relatorio/page-relatorio.component';
 
 const routes:Routes = [
   {path: 'editar_produto', component: PageEditProdutoComponent},
   {path: 'produtos', component: PageProdutosComponent},
   {path: 'balanco', component: PageBalancoComponent},
+  {path: 'relatorio', component: PageRelatorioComponent},
   {path: '', pathMatch:'full', redirectTo: 'produtos'}
 ]
 
@@ -38,6 +41,7 @@ const routes:Routes = [
     PageEditProdutoComponent,
     TitlePageComponent,
     PageBalancoComponent,
+    PageRelatorioComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +59,7 @@ const routes:Routes = [
     FormsModule,
     HttpClientModule,
     CommonModule,
+    FlexLayoutModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],

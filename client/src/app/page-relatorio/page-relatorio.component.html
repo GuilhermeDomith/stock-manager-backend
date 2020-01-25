@@ -1,0 +1,29 @@
+<title-page text="Relatório de Estoque"></title-page>
+
+<main class="container">
+    <mat-card>
+        <div id="header-list">
+            <span style="flex-grow: 9">Produto</span>
+            <span style="flex-grow: 1">Término Previsto</span>
+        </div>
+        <mat-list *ngIf="produtos">
+            <ng-container *ngIf="produtos && produtos.length > 0; else withoutProdutos">
+                    <mat-list-item *ngFor="let produto of produtos" class="list-item">
+                        <h3 matLine class="descricao-produto"> {{produto.descricao}} </h3>
+                        <p matLine>
+                            <span class="info-produto">
+                                Última Atualização: {{produto.data_update | date:'dd/MM/yyyy'}} - {{produto.quantidade}} Unid.
+                            </span>
+                        </p>
+                        <span class="data-termino-prod">{{ produto.data_termino | date:'dd/MM/yyyy' }}</span>
+                    </mat-list-item>
+            </ng-container>
+            <ng-template #withoutProdutos>
+                    <mat-list-item >
+                        <p matLine> Não há nenhum produto a ser exibido. </p>
+                    </mat-list-item>
+            </ng-template>
+        </mat-list>
+    </mat-card>
+
+</main>
