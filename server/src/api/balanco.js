@@ -14,7 +14,8 @@ module.exports = function(app) {
                 historicoDao.registrar_historico(historico)
                     .then(() => {
                         atualizarEstoque(produto_balanco)
-                            .then(handlerSuccessRealizarBalanco)
+                            .then(() => atualizarPrevisaoTerminoProduto(produto_balanco.id))
+                            .then(() => handlerSuccessRealizarBalanco(res))
                             .catch((err) => handlerErrorRealizarBalanco(err, res))
                     })
                     .catch((err) => handlerErrorRealizarBalanco(err, res))
@@ -23,6 +24,7 @@ module.exports = function(app) {
     })
 
     function handlerErrorRealizarBalanco(err, res){
+        console.log(err)
         res.status(400).json({status: err.sqlMessage || err})
     }
 
@@ -71,6 +73,26 @@ module.exports = function(app) {
             produto.data_update, 'yyyymmdd')
 
         return produtoDao.editar_produto(produto)
+    }
+
+    function atualizarPrevisaoTerminoProduto(id_produto){
+        historicoDao.obterGastoMedioProduto(id_produto)
+            .then((result) => {
+                if(!result) return
+                let dias_duracao = result[0].quantidade/result[0].gasto_medio
+                let data_update = result[0].data_update
+
+                console.log(dias_duracao)
+
+                let data_termino  = new Date(data_update.getTime() +  dateformat.convertDaysAsMillis(dias_duracao))
+                data_termino = dateformat.dateToString(data_termino, 'yyyymmdd')
+
+                produtoDao.atualizar_gasto_medio(
+                    id_produto, result[0].gasto_medio, data_termino)
+                    .then(() => {console.log("Gasto médio do produto atualizado.")})
+                    .catch((err) => {throw err})
+            })
+            .catch((err) => {throw err})
     }
 
 }

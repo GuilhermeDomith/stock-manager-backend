@@ -23,6 +23,10 @@ function dateutils(){
         return Math.abs(date2 - date1) / 1000 / 60 / 60 / 24
     }
 
+    this.convertDaysAsMillis = function(days){
+        return days*24*60*60*1000
+    }
+
     return this
 }
 

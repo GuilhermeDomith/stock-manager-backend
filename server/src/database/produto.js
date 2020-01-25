@@ -47,6 +47,18 @@ function produtoDao(){
         return queryPromisse(connection, sql)
     }
 
+    this.atualizar_gasto_medio = function(id_produto, gasto_medio, data_termino, callback){
+        var sql = `UPDATE produto as p 
+            SET p.gasto_medio_diario="$1", p.data_termino="$2"
+            WHERE id="$3";`
+        
+        sql = sql.replace('$1', gasto_medio)
+            .replace('$2', data_termino)
+            .replace('$3', id_produto)
+        
+        return queryPromisse(connection, sql)
+    }
+    
     this.get_produto = function (id){
         let sql = `SELECT * FROM produto WHERE id="$1"`
         sql = sql.replace("$1", id)

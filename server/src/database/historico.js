@@ -13,7 +13,7 @@ function queryPromisse(connection, sql){
 
 function historicoDao(){
 
-    this.registrar_historico = function(historico, callback){
+    this.registrar_historico = function(historico){
         var sql = `INSERT INTO historico_estoque 
         (id_produto, data_abert, quant_abert, data_fech, quant_fech, gasto_diario) 
         VALUES ("$1", "$2", "$3", "$4", "$5", "$6");`
@@ -26,6 +26,18 @@ function historicoDao(){
             .replace('$6', historico.gasto_diario)
         
         return queryPromisse(connection, sql)
+    }
+
+    this.obterGastoMedioProduto = function(id_produto){
+        var sql = `SELECT id_produto, quantidade, data_update, AVG(gasto_diario) as gasto_medio
+            FROM historico_estoque AS h INNER JOIN produto as p 
+            WHERE h.id_produto=p.id && id_produto="$1" 
+            ORDER BY data_fech
+            DESC LIMIT 3;`
+        
+        sql = sql.replace('$1', id_produto)
+        
+        return queryPromisse(connection, sql)   
     }
 
     return this;
