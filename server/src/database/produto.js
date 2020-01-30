@@ -1,5 +1,4 @@
-var db = require('./connection.js')
-var connection = db.connect()
+const connection = require('./connection.js')
 
 function queryPromisse(connection, sql){
     return new Promise((resolve, reject) => {

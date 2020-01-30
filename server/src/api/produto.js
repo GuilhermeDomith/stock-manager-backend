@@ -4,10 +4,13 @@ const dateformat = require('../utils/dateformat.js')
 
 module.exports = function(app){
 
-    app.get('/produto', function(req, res){
-        produtoDao.listar_produtos()
-            .then((produtos) => res.json(produtos))
-            .catch((err) => res.status(400).json({status: err.sqlMessage}))
+    app.get('/produto', async function(req, res){
+        try{
+            const produtos = await produtoDao.listar_produtos()
+            res.json(produtos)
+        }catch(err){
+            res.status(400).json({status: err.sqlMessage})
+        }
     })
 
     app.post('/produto', function(req, res){
