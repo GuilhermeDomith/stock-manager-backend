@@ -21,7 +21,14 @@ module.exports = function(app){
             salvar_produto = produtoDao.editar_produto
 
         salvar_produto(produto)
-            .then(() => res.json({status: "Produto salvo."}))
+            .then((result) => {
+                if(result.affectedRows == 0)
+                    res.status(400).json({
+                        status: "Produto não pôde ser alterado ou não existe."
+                    })    
+                else
+                    res.json({status: "Produto salvo."})
+            })
             .catch((err) => res.status(400).json({status: err.sqlMessage}))
     })
 
