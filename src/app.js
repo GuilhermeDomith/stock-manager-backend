@@ -2,8 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+
 require('dotenv').config({
-    path: (process.env.NODE_ENV == 'test')? '.test.env' : '.env'
+    path: `.${process.env.NODE_ENV}.env`
 })
 
 app = express()
