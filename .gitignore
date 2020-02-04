@@ -4,7 +4,6 @@
 *.sh
 /backup
 /scripts
-/__tests__
 
 /dist/
 /bazel-out
