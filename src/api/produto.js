@@ -13,31 +13,40 @@ module.exports = function(app){
         }
     })
 
-    app.post('/produto', function(req, res){
+    app.post('/produto', async function(req, res){
         var produto = req.body;
         let salvar_produto = produtoDao.inserir_produto
 
         if(produto.id)
             salvar_produto = produtoDao.editar_produto
 
-        salvar_produto(produto)
-            .then((result) => {
-                if(result.affectedRows == 0)
-                    res.status(400).json({
-                        status: "Produto não pôde ser alterado ou não existe."
-                    })    
-                else
-                    res.json({status: "Produto salvo."})
-            })
-            .catch((err) => res.status(400).json({status: err.sqlMessage}))
+        try{
+            let result = await salvar_produto(produto)
+
+            if(result.affectedRows == 0)
+                res.status(400).json({
+                    status: "Produto não pôde ser alterado ou não existe."
+                })    
+            else
+                res.json({status: "Produto salvo."})
+
+        }catch(err){
+            res.status(400).json({status: err.sqlMessage})
+        }
     })
 
-    app.delete('/produto', function(req, res){
+    app.delete('/produto', async function(req, res){
         var id  = req.body.id
         
-        produtoDao.delete_produto({id})
-            .then((result) => res.json({id: id, status:`produtos excluídos: ${result.affectedRows}`}))
-            .catch((err) => res.status(400).json({id: id, status: err.sqlMessage}))
+        try{
+            let result = await produtoDao.delete_produto({ id })
+            res.json({
+                id: id,
+                status:`produtos excluídos: ${result.affectedRows}`
+            })
+        } catch(err){
+            res.status(400).json({ id: id, status: err.sqlMessage })
+        }
     })
 
 }

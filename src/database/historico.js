@@ -16,11 +16,20 @@ function historicoDao(){
         var sql = `INSERT INTO historico_estoque 
         (id_produto, data_abert, quant_abert, data_fech, quant_fech, gasto_diario) 
         VALUES ("$1", "$2", "$3", "$4", "$5", "$6");`
+
+        let data_abert = historico.data_abert
+        let data_fech = historico.data_fech
+
+        if(typeof(data_abert) != "string")
+            data_abert = dateformat.dateToString(data_abert, 'yyyymmdd')
+
+        if(typeof(data_fech) != "string")
+            data_fech = dateformat.dateToString(data_fech, 'yyyymmdd')
         
         sql = sql.replace('$1', historico.id_produto)
-            .replace('$2', dateformat.dateToString(historico.data_abert, 'yyyymmdd') )
+            .replace('$2', data_abert)
             .replace('$3', historico.quant_abert)
-            .replace('$4', dateformat.dateToString(historico.data_fech, 'yyyymmdd') )
+            .replace('$4', data_fech)
             .replace('$5', historico.quant_fech)
             .replace('$6', historico.gasto_diario)
         

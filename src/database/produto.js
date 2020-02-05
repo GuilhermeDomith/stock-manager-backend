@@ -1,4 +1,5 @@
 const connection = require('./connection.js')
+const dateformat = require('../utils/dateformat.js')
 
 function queryPromisse(connection, sql){
     return new Promise((resolve, reject) => {
@@ -14,10 +15,15 @@ function produtoDao(){
     this.inserir_produto = function(produto){
         var sql = `INSERT INTO produto (descricao, quantidade, data_update) 
                 VALUES ("$1", "$2", "$3");`
+
+        let data_update = produto.data_update
+
+        if(typeof(data_update) != "string")
+            data_update = dateformat.dateToString(data_update, 'yyyymmdd')
         
         sql = sql.replace('$1', produto.descricao)
             .replace('$2', produto.quantidade)
-            .replace('$3', produto.data_update)
+            .replace('$3', data_update)
         
         return queryPromisse(connection, sql)
     }
@@ -27,9 +33,14 @@ function produtoDao(){
             p.descricao="$1", p.quantidade="$2", p.data_update="$3"
             WHERE p.id="$4";`
         
+        let data_update = produto.data_update
+
+        if(typeof(data_update) != "string")
+            data_update = dateformat.dateToString(data_update, 'yyyymmdd')
+        
         sql = sql.replace('$1', produto.descricao)
             .replace('$2', produto.quantidade)
-            .replace('$3', produto.data_update)
+            .replace('$3', data_update)
             .replace('$4', produto.id)
         
         return queryPromisse(connection, sql)
@@ -50,6 +61,9 @@ function produtoDao(){
         var sql = `UPDATE produto as p 
             SET p.gasto_medio_diario="$1", p.data_termino="$2"
             WHERE id="$3";`
+
+        if(typeof(data_termino) != "string")
+            data_termino = dateformat.dateToString(data_termino, 'yyyymmdd')
         
         sql = sql.replace('$1', gasto_medio)
             .replace('$2', data_termino)

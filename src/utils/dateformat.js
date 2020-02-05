@@ -20,6 +20,7 @@ function dateutils(){
     }
 
     this.subtractDates = function(date1, date2){
+        console.log(date1, date2)
         return Math.abs(date2 - date1) / 1000 / 60 / 60 / 24
     }
 
