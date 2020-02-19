@@ -1,5 +1,5 @@
 const dateformat = require('../utils/dateformat.js')
-const connection = require('./connection.js')
+const connection = require('../config/pool-factory.js')
 
 function queryPromisse(connection, sql){
     return new Promise((resolve, reject) => {
@@ -10,11 +10,13 @@ function queryPromisse(connection, sql){
     })
 }
 
-function historicoDao(){
+class historicoDao{
 
-    this.registrar_historico = function(historico){
+    constructor() {}
+
+    registrar_historico(historico){
         var sql = `INSERT INTO historico_estoque 
-        (id_produto, data_abert, quant_abert, data_fech, quant_fech, gasto_diario) 
+        (id_product, date_open, date_close, quantity_open, quantity_close, daily_spend) 
         VALUES ("$1", "$2", "$3", "$4", "$5", "$6");`
 
         let data_abert = historico.data_abert
@@ -28,28 +30,25 @@ function historicoDao(){
         
         sql = sql.replace('$1', historico.id_produto)
             .replace('$2', data_abert)
-            .replace('$3', historico.quant_abert)
-            .replace('$4', data_fech)
+            .replace('$3', data_fech)
+            .replace('$4', historico.quant_abert)
             .replace('$5', historico.quant_fech)
             .replace('$6', historico.gasto_diario)
         
         return queryPromisse(connection, sql)
     }
 
-    this.obterGastoMedioProduto = function(id_produto){
-        var sql = `SELECT id_produto, quantidade, data_update, AVG(gasto_diario) as gasto_medio
-            FROM historico_estoque AS h INNER JOIN produto as p 
-            WHERE h.id_produto=p.id && id_produto="$1" 
-            ORDER BY data_fech
+    obterGastoMedioProduto(id_produto){
+        var sql = `SELECT id_product, quantity, last_update, AVG(daily_spend) as gasto_medio
+            FROM history AS hist INNER JOIN product as prod 
+            WHERE hist.id_product=prod.id && id_product="$1" 
+            ORDER BY date_close
             DESC LIMIT 3;`
         
         sql = sql.replace('$1', id_produto)
         
         return queryPromisse(connection, sql)   
     }
-
-    return this;
-
 }
 
-module.exports = historicoDao()
+module.exports = new historicoDao()

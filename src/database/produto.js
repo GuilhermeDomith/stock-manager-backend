@@ -1,4 +1,4 @@
-const connection = require('./connection.js')
+const connection = require('../config/pool-factory.js')
 const dateformat = require('../utils/dateformat.js')
 
 function queryPromisse(connection, sql){
@@ -10,10 +10,12 @@ function queryPromisse(connection, sql){
     })
 }
 
-function produtoDao(){
+class produtoDao{
 
-    this.inserir_produto = function(produto){
-        var sql = `INSERT INTO produto (descricao, quantidade, data_update) 
+    constructor(){}
+
+    inserir_produto(produto){
+        var sql = `INSERT INTO product (description, quantity, last_update) 
                 VALUES ("$1", "$2", "$3");`
 
         let data_update = produto.data_update
@@ -28,9 +30,9 @@ function produtoDao(){
         return queryPromisse(connection, sql)
     }
 
-    this.editar_produto = function(produto, callback){
-        var sql = `UPDATE produto as p SET 
-            p.descricao="$1", p.quantidade="$2", p.data_update="$3"
+    editar_produto(produto, callback){
+        var sql = `UPDATE product as p SET 
+            p.description="$1", p.quantity="$2", p.last_update="$3"
             WHERE p.id="$4";`
         
         let data_update = produto.data_update
@@ -46,20 +48,20 @@ function produtoDao(){
         return queryPromisse(connection, sql)
     }
 
-    this.listar_produtos = function (){
-        let sql = "SELECT * FROM produto;"
+    listar_produtos(){
+        let sql = "SELECT * FROM product;"
         return queryPromisse(connection, sql)
     }
 
-    this.delete_produto = function (produto, callback){
-        var sql = `DELETE FROM produto WHERE id="$1"`
+    delete_produto(produto, callback){
+        var sql = `DELETE FROM product WHERE id="$1"`
         sql = sql.replace('$1', produto.id)
         return queryPromisse(connection, sql)
     }
 
-    this.atualizar_gasto_medio = function(id_produto, gasto_medio, data_termino, callback){
-        var sql = `UPDATE produto as p 
-            SET p.gasto_medio_diario="$1", p.data_termino="$2"
+    atualizar_gasto_medio(id_produto, gasto_medio, data_termino, callback){
+        var sql = `UPDATE product as p 
+            SET p.mean_spend="$1", p.date_to_finish="$2"
             WHERE id="$3";`
 
         if(typeof(data_termino) != "string")
@@ -72,14 +74,11 @@ function produtoDao(){
         return queryPromisse(connection, sql)
     }
     
-    this.get_produto = function (id){
-        let sql = `SELECT * FROM produto WHERE id="$1"`
+    get_produto(id){
+        let sql = `SELECT * FROM product WHERE id="$1"`
         sql = sql.replace("$1", id)
         return queryPromisse(connection, sql)
     }
-
-    return this;
-
 }
 
-module.exports = produtoDao()
+module.exports = new produtoDao()

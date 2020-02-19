@@ -1,9 +1,6 @@
 .DS_STORE
 *.env
-*.sql
-*.sh
 /backup
-/scripts
 
 /dist/
 /bazel-out
