@@ -1,10 +1,10 @@
-app = require('./src/app.js')
+const app = require('./src/app.js');
 
-var server = {
-    host: 'localhost',
-    port: 3000
-}
+const server = {
+  host: 'localhost',
+  port: 3000,
+};
 
-app.listen(server, function(){
-    console.log(`Servidor executando na porta ${server.port}`)
-})
+app.listen(server, function () {
+  console.log(`Server is running on http://${server.host}:${server.port}`);
+});

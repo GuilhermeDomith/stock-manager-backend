@@ -1,7 +1,7 @@
-.DS_STORE
 *.env
 /backup
 
+.DS_STORE
 /dist/
 /bazel-out
 /integration/bazel/bazel-*

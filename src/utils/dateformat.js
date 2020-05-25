@@ -1,34 +1,23 @@
-var dateformat = require('dateformat')
+var dateformat = require('dateformat');
 
-function dateutils(){
+class DateUtils {
+  dateToString = function (date, format) {
+    if (typeof date_open != 'string') return dateformat(date, format);
+    return date;
+  };
 
-    this.dateToString = function (date, format){
-        return dateformat(date, format)
-    }
+  subtractDates = function (date1, date2) {
+    return Math.abs(date2 - date1) / 1000 / 60 / 60 / 24;
+  };
 
-    this.stringToDate = function (dateString, format){
-        let index_year = format.search('yyyy')
-        let year = dateString.slice(index_year, index_year + 4)
+  convertDaysAsMillis = function (days) {
+    return days * 24 * 60 * 60 * 1000;
+  };
 
-        let index_month = format.search('mm')
-        let month = dateString.slice(index_month, index_month + 2)
-
-        let index_day = format.search('dd')
-        let day = dateString.slice(index_day, index_day + 2)
-
-        return new Date(year, parseInt(month)-1 , day)
-    }
-
-    this.subtractDates = function(date1, date2){
-        console.log(date1, date2)
-        return Math.abs(date2 - date1) / 1000 / 60 / 60 / 24
-    }
-
-    this.convertDaysAsMillis = function(days){
-        return days*24*60*60*1000
-    }
-
-    return this
+  getDateAddingDays(add_days, date = new Date()) {
+    let millis_duration = this.convertDaysAsMillis(add_days);
+    return new Date(date.getTime() + millis_duration);
+  }
 }
 
-module.exports = dateutils()
+module.exports = new DateUtils();

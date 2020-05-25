@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `history` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `id_product` bigint(20) DEFAULT NULL,
   `date_open` date DEFAULT NULL,
   `date_close` date DEFAULT NULL,
@@ -54,8 +54,8 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product` (
-  `id` bigint(20) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL UNIQUE,
   `quantity` double DEFAULT NULL,
   `last_update` date DEFAULT NULL,
   `mean_spend` double DEFAULT NULL,

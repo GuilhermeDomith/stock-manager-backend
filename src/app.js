@@ -1,18 +1,23 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+require('./config/dotenv.config');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
+const dbConnectionMiddleware = require('./middlewares/db-connection.middleware');
+const pool = require('./config/pool-factory.config');
 
-require('dotenv').config({
-    path: `.${process.env.NODE_ENV}.env`
-})
+const app = express();
 
-app = express()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(cors())
+// middlewares
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-require('./api/balanco.js')(app)
-require('./api/produto.js')(app)
+// created middlewares
+app.use(dbConnectionMiddleware(pool));
 
-module.exports = app 
+// routes
+app.use('/products', require('./routes/product.routes.js'));
+app.use('/stock', require('./routes/stock.routes.js'));
+
+module.exports = app;
