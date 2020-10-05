@@ -1,8 +1,18 @@
 var dateformat = require('dateformat');
 
 class DateUtils {
+
+  dateToSQL = function (date) {
+    if (typeof date != 'object')
+      return null
+    
+    return date.toISOString().slice(0, 19).replace('T', ' ')  
+  }
+
   dateToString = function (date, format) {
-    if (typeof date_open != 'string') return dateformat(date, format);
+    if (typeof date == 'object')
+      return dateformat(date, format);
+    
     return date;
   };
 

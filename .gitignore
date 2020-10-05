@@ -1,5 +1,7 @@
 *.env
 /backup
+/database
+/db
 
 .DS_STORE
 /dist/

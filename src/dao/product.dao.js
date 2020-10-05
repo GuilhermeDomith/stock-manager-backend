@@ -1,4 +1,4 @@
-const dateformat = require('../utils/dateformat.js');
+const df = require('../utils/dateformat.js');
 const executeQuery = require('../utils/db-query-promise.js');
 
 class ProductDao {
@@ -11,18 +11,12 @@ class ProductDao {
             (description, quantity, last_update, mean_spend, date_to_finish) 
             VALUES ("$1", "$2", "$3", "$4", "$5");`;
 
-    let last_update = dateformat.dateToString(product.last_update, 'yyyymmdd');
-    let date_to_finish = dateformat.dateToString(
-      product.date_to_finish,
-      'yyyymmdd'
-    );
-
-    sql = sql
+   sql = sql
       .replace('$1', product.description)
       .replace('$2', product.quantity)
-      .replace('$3', last_update)
+      .replace('$3', df.dateToSQL(product.last_update))
       .replace('$4', product.mean_spend)
-      .replace('$5', date_to_finish);
+      .replace('$5', df.dateToSQL(product.date_to_finish));
 
     const result = await executeQuery(this.connection, sql);
 
@@ -39,8 +33,8 @@ class ProductDao {
             p.mean_spend="$4", p.date_to_finish="$5"
             WHERE p.id="$6";`;
 
-    let last_update = dateformat.dateToString(product.last_update, 'yyyymmdd');
-    let date_to_finish = dateformat.dateToString(
+    let last_update = df.dateToString(product.last_update, 'yyyymmdd');
+    let date_to_finish = df.dateToString(
       product.date_to_finish,
       'yyyymmdd'
     );
