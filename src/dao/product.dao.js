@@ -11,7 +11,7 @@ class ProductDao {
             (description, quantity, last_update, mean_spend, date_to_finish) 
             VALUES ("$1", "$2", "$3", "$4", "$5");`;
 
-   sql = sql
+    sql = sql
       .replace('$1', product.description)
       .replace('$2', product.quantity)
       .replace('$3', df.dateToSQL(product.last_update))
@@ -28,28 +28,22 @@ class ProductDao {
   }
 
   async update(id, product) {
-    var sql = `UPDATE product as p SET 
+    let sql = `UPDATE product as p SET 
             p.description="$1", p.quantity="$2", p.last_update="$3",
             p.mean_spend="$4", p.date_to_finish="$5"
             WHERE p.id="$6";`;
 
-    let last_update = df.dateToString(product.last_update, 'yyyymmdd');
-    let date_to_finish = df.dateToString(
-      product.date_to_finish,
-      'yyyymmdd'
-    );
-
     sql = sql
       .replace('$1', product.description)
       .replace('$2', product.quantity)
-      .replace('$3', last_update)
+      .replace('$3', df.dateToString(product.last_update, 'yyyymmdd'))
       .replace('$4', product.mean_spend)
-      .replace('$5', date_to_finish)
+      .replace('$5', df.dateToString(product.date_to_finish, 'yyyymmdd'))
       .replace('$6', id);
 
     const result = await executeQuery(this.connection, sql);
 
-    if (result.affectedRows == 0)
+    if (result.affectedRows === 0)
       throw new Error('Não foi possível atualizar o produto.');
 
     return product;
@@ -67,7 +61,7 @@ class ProductDao {
     const result = await executeQuery(this.connection, sql);
 
     if (result.affectedRows === 0)
-      throw new Error('Não foi possível excluir o produto.');
+      throw new Error('Não foi possível excluir o produto');
 
     return result;
   }

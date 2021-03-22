@@ -19,5 +19,6 @@ app.use(dbConnectionMiddleware(pool));
 // routes
 app.use('/products', require('./routes/product.routes.js'));
 app.use('/stock', require('./routes/stock.routes.js'));
+app.use('/history', require('./routes/history.routes.js'));
 
 module.exports = app;

@@ -1,5 +1,6 @@
 const StockBalance = require('../services/stock-balance.js');
 const ProductDao = require('../dao/product.dao.js');
+const { success, error } = require('../utils/responses.js');
 
 class ProductController {
   async insertProduct(req, res) {
@@ -9,11 +10,9 @@ class ProductController {
     try {
       product.date_to_finish = StockBalance.calcDateToFinish(product);
       product = await productDao.insert(product);
-
-      res.json({ data: product, status: 'Produto salvo.' });
+      success(res, { data: product });
     } catch (err) {
-      console.log(err);
-      res.status(400).json({ status: err.sqlMessage || err.error });
+      error(res, { message: err.sqlMessage || err.message });
     }
   }
 
@@ -24,9 +23,9 @@ class ProductController {
 
     try {
       await productDao.update(id, product);
-      res.json({ status: 'Produto salvo.' });
+      success(res);
     } catch (err) {
-      res.status(400).json({ status: err.sqlMessage || err.error });
+      error(res, { message: err.sqlMessage || err.message });
     }
   }
 
@@ -35,9 +34,9 @@ class ProductController {
 
     try {
       const products = await productDao.list();
-      res.json(products);
+      success(res, { data: products });
     } catch (err) {
-      res.status(400).json({ status: err.sqlMessage });
+      error(res, { message: err.sqlMessage || err.message });
     }
   }
 
@@ -47,9 +46,9 @@ class ProductController {
 
     try {
       const product = await productDao.get(id);
-      res.json(product);
+      success(res, { data: product });
     } catch (err) {
-      res.status(400).json({ id, status: err.sqlMessage });
+      error(res, { message: err.sqlMessage || err.message });
     }
   }
 
@@ -59,9 +58,9 @@ class ProductController {
 
     try {
       await productDao.delete(id);
-      res.send();
+      success(res);
     } catch (err) {
-      res.status(400).json({ id, status: err.sqlMessage });
+      error(res, { message: err.sqlMessage || err.message });
     }
   }
 }

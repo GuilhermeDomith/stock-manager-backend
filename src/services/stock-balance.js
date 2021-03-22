@@ -52,24 +52,27 @@ class StockBalance {
       history.date_close
     );
 
-    if (diffDays <= 30) {
-      throw (
+    if (diffDays < 15) {
+      throw new Error(
         'O balanço do produto só pode ser ' +
-        'realizado 30 dias após a sua última atualização.'
+          'realizado 15 dias após a sua última atualização.'
       );
     }
 
-    let quantitySpent = history.quantity_open - history.quantity_close;
+    const quantitySpent = history.quantity_open - history.quantity_close;
     return quantitySpent / diffDays;
   }
 
   static calcDateToFinish(product) {
     product.last_update = new Date(product.last_update);
 
-    let duringDays = product.quantity / product.mean_spend;
-    let duringMillis = dateformat.convertDaysAsMillis(duringDays);
+    let meanSpend = product.mean_spend
+    meanSpend = meanSpend != null && meanSpend > 0 ? meanSpend : 1;
 
-    let dateToFinish = new Date(product.last_update.getTime() + duringMillis);
+    const duringDays = product.quantity / meanSpend;
+    const duringMillis = dateformat.convertDaysAsMillis(duringDays);
+
+    const dateToFinish = new Date(product.last_update.getTime() + duringMillis);
     return dateToFinish;
   }
 }

@@ -1,4 +1,8 @@
 const StockBalance = require('../services/stock-balance.js');
+const StockDao = require('../dao/stock.dao.js');
+const ProductDao = require('../dao/product.dao.js');
+const HistoryDao = require('../dao/history.dao.js');
+const { success, error } = require('../utils/responses');
 
 class StockController {
   async updateStockOfProduct(req, res) {
@@ -15,16 +19,62 @@ class StockController {
         stock.addQuantity
       );
 
-      res.json({
-        status: 'O Balanço do produto foi realizado e seu estoque atualizado.',
+      success(res, {
+        message: 'O Balanço do produto foi realizado e seu estoque atualizado.',
       });
     } catch (err) {
-      console.log(err);
-      res.status(400).json({ status: err.sqlMessage || err });
+      error(res, { message: err.message || err });
     }
   }
 
-  async listStockOfProducts(req, res) {}
+  async restoreLastStockOfProduct(req, res) {
+    var { id } = req.params;
+
+    const productDao = new ProductDao(req.connection);
+    const historyDao = new HistoryDao(req.connection);
+
+    try {
+      const product = await productDao.get(id);
+      const history = await historyDao.getLastByProduct(id);
+
+      if (history != null) {
+        await historyDao.delete(history.id);
+
+        product.quantity = history.quantity_open;
+        product.last_update = history.date_open;
+        const m = await historyDao.calcMeanDailySpendOfProduct(product.id);
+        product.mean_spend = m;
+        product.date_to_finish = StockBalance.calcDateToFinish(product);
+
+        await productDao.update(product.id, product);
+      }
+
+      success(res);
+    } catch (err) {
+      error(res, { message: err.message || err });
+    }
+  }
+
+  async listStock(req, res) {
+    const stockDao = new StockDao(req.connection);
+    try {
+      const products = await stockDao.listStock();
+      success(res, { data: products });
+    } catch (err) {
+      error(res, { message: err.sqlMessage || err.message });
+    }
+  }
+
+  async listLowStock(req, res) {
+    const stockDao = new StockDao(req.connection);
+    try {
+      const products = await stockDao.listLowStock();
+      success(res, { data: products });
+    } catch (err) {
+      error(res, { message: err.sqlMessage || err.message });
+    }
+  }
 }
+
 
 module.exports = new StockController();
