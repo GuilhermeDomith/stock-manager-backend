@@ -1,0 +1,178 @@
+#!/bin/bash
+
+################################################################################
+# Help                                                                         #
+################################################################################
+Help() {
+    echo 
+    echo "Execute procedures on database likes backup, restore database or others that can be added"
+    echo "in the future. This scripts requires environment file to be executed. The file must be"
+    echo "named like \".dev.env\" or \".prod.env\" to be found, accordind to --target option."
+    echo "The environment variables must exists in environment file: "
+    echo  "     - DB_USER"
+    echo  "     - DB_HOST"
+    echo  "     - DB_PASS"
+    echo  "     - DB_NAME"
+    echo
+    echo "Usage: ./db -t [dev|prod] -c [backup|restore]"
+    echo "       ./db -t [dev|prod] -c [backup|restore] -f /tmp/example.sql -o"
+    echo
+    echo "options:"
+    echo "-t, --target      Indicates target database to be used in operations."
+    echo "                  This script looks for environment file (.env) according to target." 
+    echo "-c, --command     Procedure to be performed."
+    echo "-f, --file        path of sql file used to backup or restore database."
+    echo "                  This option is opcional and default path is based on --target option." 
+    echo "                  Default, if --target is \"dev\": ./backup.dev.sql ." 
+    echo "-o, --output      Enable to show all outputs."
+    echo 
+}
+
+################################################################################
+################################################################################
+# Main program                                                                 #
+################################################################################
+################################################################################
+################################################################################
+
+TARGET=""
+COMMAND=""
+BACKUP_FILE=""
+VERBOSE=true
+OUTPUT=/dev/null
+POSITIONAL_ARGS=()
+
+log() {
+    case $1 in
+        -e) 
+            shift
+            RED='\033[0;31m' && NC='\033[0m'
+            echo -e "${RED}... $@${NC}" && echo
+            ;;
+        *) 
+            echo "... $@"
+            ;;  
+    esac
+}
+
+## Process input options
+
+while [[ $# -gt 0 ]]; do
+    KEY="$1"
+    case $KEY in
+        -h|--help)
+            Help
+            exit 0
+            ;;
+        -t|--target) 
+            TARGET="$2"
+            shift;shift
+            ;;
+        -c|--commmand) 
+            COMMAND="$2"
+            shift;shift
+            ;;
+        -f|--file)
+            BACKUP_FILE="$2"
+            shift;shift
+            ;;
+        -o|--output)
+            echo "AQUI"
+            OUTPUT=""
+            shift
+            ;;
+        *) 
+            # Verify and exit if it's an invalid option
+            FIRST_CHAR=$(echo "$KEY" | cut -c1)
+            if [[ $FIRST_CHAR == "-" ]]; then
+                log -e "Command \"$KEY\" doesn't exists"
+                exit 1
+            fi
+            
+            POSITIONAL_ARGS+=("$KEY")
+            shift
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional args
+
+# Set redirect output 
+if [ -z $OUTPUT ]; then
+    exec 4>&2
+else
+    exec 4>$OUTPUT
+fi
+
+## Validate options
+
+[ -z $TARGET ] && log -e "\"--target\" option is required" && ERROR=1
+[ -z $COMMAND ] && log -e "\"--command\" option is required" && ERROR=1
+[ -z $BACKUP_FILE ] && BACKUP_FILE="backup.$TARGET.sql"
+[ $ERROR ] && exit 1
+
+TARGET_FILE=".$TARGET.env"
+stat $TARGET_FILE &>/dev/null
+[ $? -ne 0 ] && log -e "Environment file \"$TARGET_FILE\" not found." && exit 1
+
+## Read enviroments environment file
+
+echo && log "Environments:"
+ENVS=$(cat $TARGET_FILE | awk 'substr($1,1,1) != "#" {print $1}')
+for ENV in $ENVS; do
+    log $ENV
+    export $ENV
+done
+echo
+
+
+## Execute precedure on database
+
+backup_database() {
+    log "Performing backup database \"$DB_NAME\""
+    mysqldump --no-tablespaces -u $DB_USER -h $DB_HOST -p$DB_PASS $DB_NAME > $BACKUP_FILE 2>&4
+    [ $? -ne 0 ] && log -e "Backup can't be executed!" && exit 1
+}
+
+check_restore() {
+    stat $BACKUP_FILE &>/dev/null
+    [ $? -ne 0 ] && log -e "Backup file \"$BACKUP_FILE\" not found." && exit 1
+
+    log "Checking database \"$DB_NAME\""
+    mysql -u $DB_USER -p$DB_PASS -h $DB_HOST -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" 2>&4
+    [ $? -ne 0 ] && log -e "Error" && exit 1
+}
+
+drop_tables() {
+    mysql -u $DB_USER -p$DB_PASS -h $DB_HOST $DB_NAME -Nse 'show tables' 2>&4 \
+    | while read TABLE; do 
+        log "Dropping table \"$TABLE\""
+        mysql -u $DB_USER -p$DB_PASS -h $DB_HOST $DB_NAME -e "drop table $TABLE" 2>&4
+        [ $? -ne 0 ] && log -e "Error" && exit 1
+    done
+}
+
+restore_backup() {
+    log "Restoring backup"
+
+    mysql -u $DB_USER -p$DB_PASS -h $DB_HOST $DB_NAME < $BACKUP_FILE 2>&4
+    [ $? -ne 0 ] && log -e "Error" && exit 1
+}
+
+case $COMMAND in
+   backup) 
+        backup_database
+        ;;
+   restore)
+        check_restore
+        drop_tables
+        restore_backup
+        ;;
+    *)
+        log -e Invalid --command \"$COMMAND\"
+        exit 1
+        ;;
+esac
+
+log "Done" && echo
+exit 0
